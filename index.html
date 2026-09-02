@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- SEO Ayarları (Google'da Çıkmak İçin) -->
+    <title>Ankara Matematik Özel Ders | Hacettepeli Hoca ile Yeni Nesil Eğitim</title>
+    <meta name="description" content="Hacettepe Üniversitesi Matematik Öğretmenliği öğrencisinden TYT, AYT, LGS ve Ara Sınıflar için ezbersiz, görsel ve interaktif özel ders programı.">
+    <meta name="keywords" content="ankara matematik özel ders, tyt matematik özel ders, ayt matematik ankara, hacettepe matematik özel ders, online matematik dersi">
+    <meta name="author" content="Hacettepeli Matematik Hocası">
+
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: linear-gradient(135deg, #090d16, #111827, #1e1b4b);
+            color: #f8fafc;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 25px 15px;
+        }
+        .container { max-width: 520px; width: 100%; }
+        
+        .header { text-align: center; margin-bottom: 20px; }
+        .badge {
+            background: linear-gradient(90deg, #ec4899, #8b5cf6);
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 0.8em;
+            font-weight: bold;
+            display: inline-block;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        h1 { font-size: 1.9em; margin-bottom: 5px; }
+        .sub { color: #94a3b8; font-size: 0.95em; }
+
+        .card {
+            background: rgba(255, 255, 255, 0.04);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 18px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.3);
+        }
+        .card-title { 
+            font-size: 1.15em; 
+            color: #38bdf8; 
+            margin-bottom: 15px; 
+            text-align: center; 
+            font-weight: 700;
+        }
+
+        .tabs { display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px; margin-bottom: 15px; }
+        .tab-btn {
+            padding: 8px 2px;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            color: #94a3b8;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.75em;
+            transition: 0.2s;
+            text-align: center;
+        }
+        .tab-btn.active { background: #8b5cf6; color: white; border-color: #a78bfa; }
+
+        canvas {
+            background: #060911;
+            border-radius: 10px;
+            border: 1px solid #1e293b;
+            display: block;
+            margin: 0 auto 12px auto;
+            width: 100%;
+            max-width: 360px;
+            height: 220px;
+        }
+        .formula {
+            font-size: 1.1em;
+            font-weight: bold;
+            color: #f43f5e;
+            text-align: center;
+            margin-bottom: 12px;
+            font-family: monospace;
+            background: rgba(0,0,0,0.3);
+            padding: 8px;
+            border-radius: 6px;
+        }
+        .control-group {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 8px 0;
+            font-size: 0.85em;
+        }
+        input[type=range] {
+            flex-grow: 1;
+            margin: 0 12px;
+            accent-color: #8b5cf6;
+            cursor: pointer;
+        }
+
+        /* Sınav Motoru Tasarımı */
+        .quiz-item {
+            background: rgba(0,0,0,0.25);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 12px;
+            padding: 12px;
+            margin-bottom: 12px;
+        }
+        .quiz-question { font-size: 0.9em; font-weight: 600; margin-bottom: 10px; }
+        .quiz-options { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+        .q-opt {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.15);
+            color: #cbd5e1;
+            padding: 8px 10px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.82em;
+            text-align: left;
+            transition: 0.2s;
+        }
+        .q-opt:hover { background: rgba(255,255,255,0.15); }
+        .q-opt.selected { background: #8b5cf6; color: white; border-color: #a78bfa; font-weight: bold; }
+
+        .result-panel {
+            display: none;
+            background: rgba(56, 189, 248, 0.08);
+            border: 1px solid #38bdf8;
+            border-radius: 12px;
+            padding: 15px;
+            margin-top: 15px;
+            text-align: center;
+        }
+
+        .btn-action {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            background: #8b5cf6;
+            color: white;
+            padding: 12px;
+            border-radius: 10px;
+            font-weight: bold;
+            font-size: 0.95em;
+            width: 100%;
+            border: none;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .btn-action:hover { background: #7c3aed; }
+
+        .btn-whatsapp {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            background: #22c55e;
+            color: white;
+            text-decoration: none;
+            padding: 14px 20px;
+            border-radius: 50px;
+            font-weight: bold;
+            font-size: 1em;
+            transition: 0.3s;
+            box-shadow: 0 10px 20px rgba(34, 197, 94, 0.3);
+            width: 100%;
+            border: none;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        .btn-whatsapp:hover { background: #16a34a; transform: translateY(-2px); }
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+    <div class="header">
+        <div class="badge">🚀 Hacettepe Üniversitesi</div>
+        <h1>📐 Yeni Nesil Matematik</h1>
+        <p class="sub">Ezberletmeyen, Mantığı Simülasyonla Kavratan Sistem</p>
+    </div>
+
+    <!-- 1. KART: İnteraktif Laboratuvar -->
+    <div class="card">
+        <div class="card-title">🔬 İnteraktif Matematik Laboratuvarı</div>
+        
+        <div class="tabs">
+            <button class="tab-btn active" onclick="switchMode('linear')">Doğru</button>
+            <button class="tab-btn" onclick="switchMode('parabola')">Parabol</button>
+            <button class="tab-btn" onclick="switchMode('trig')">Trigonometri</button>
+            <button class="tab-btn" onclick="switchMode('pythagoras')">Pisagor</button>
+        </div>
+
+        <div class="formula" id="formula-text">y = 1x + 0</div>
+        <canvas id="graph" width="360" height="220"></canvas>
+
+        <div id="linear-controls">
+            <div class="control-group">
+                <span>Eğim (m):</span>
+                <input type="range" id="slope" min="-4" max="4" step="0.5" value="1">
+                <span id="slope-val">1</span>
+            </div>
+            <div class="control-group">
+                <span>Kesişim (b):</span>
+                <input type="range" id="intercept" min="-40" max="40" step="5" value="0">
+                <span id="intercept-val">0</span>
+            </div>
+        </div>
+
+        <div id="parabola-controls" style="display: none;">
+            <div class="control-group">
+                <span>Kollar (a):</span>
+                <input type="range" id="param-a" min="-0.08" max="0.08" step="0.01" value="0.02">
+                <span id="a-val">0.02</span>
+            </div>
+            <div class="control-group">
+                <span>Tepe X (r):</span>
+                <input type="range" id="param-r" min="-50" max="50" step="5" value="0">
+                <span id="r-val">0</span>
+            </div>
+            <div class="control-group">
+                <span>Tepe Y (k):</span>
+                <input type="range" id="param-k" min="-50" max="50" step="5" value="-20">
+                <span id="k-val">-20</span>
+            </div>
+        </div>
+
+        <div id="trig-controls" style="display: none;">
+            <div class="control-group">
+                <span>Açı (θ):</span>
+                <input type="range" id="param-angle" min="0" max="360" step="5" value="45">
+                <span id="angle-val">45°</span>
+            </div>
+        </div>
+
+        <div id="pythagoras-controls" style="display: none;">
+            <div class="control-group">
+                <span>Taban (a):</span>
+                <input type="range" id="param-base" min="30" max="140" step="5" value="80">
+                <span id="base-val">80</span>
+            </div>
+            <div class="control-group">
+                <span>Yükseklik (b):</span>
+                <input type="range" id="param-height" min="30" max="120" step="5" value="60">
+                <span id="height-val">60</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- 2. KART: Akıllı Mini Teşhis Sınavı (Lead Magnet) -->
+    <div class="card">
+        <div class="card-title">🎯 2 Dakikalık Matematik Check-Up</div>
+        <p style="font-size:0.85em; color:#94a3b8; margin-bottom:15px; text-align:center;">
+            Temel seviyeni anında ölç, eksik analiz raporunu al.
+        </p>
+
+        <!-- Soru 1 -->
+        <div class="quiz-item">
+            <div class="quiz-question">1. $f(x) = 3x - 6$ fonksiyonunun grafiği x eksenini hangi noktada keser?</div>
+            <div class="quiz-options">
+                <button class="q-opt" onclick="setAns(0, 'A', this)">A) x = -2</button>
+                <button class="q-opt" onclick="setAns(0, 'B', this)">B) x = 2</button>
+                <button class="q-opt" onclick="setAns(0, 'C', this)">C) x = 6</button>
+                <button class="q-opt" onclick="setAns(0, 'D', this)">D) x = 0</button>
+            </div>
+        </div>
+
+        <!-- Soru 2 -->
+        <div class="quiz-item">
+            <div class="quiz-question">2. $y = -2(x-3)^2 + 5$ parabolünün tepe noktası nedir?</div>
+            <div class="quiz-options">
+                <button class="q-opt" onclick="setAns(1, 'A', this)">A) (3, 5)</button>
+                <button class="q-opt" onclick="setAns(1, 'B', this)">B) (-3, 5)</button>
+                <button class="q-opt" onclick="setAns(1, 'C', this)">C) (3, -5)</button>
+                <button class="q-opt" onclick="setAns(1, 'D', this)">D) (-2, 5)</button>
+            </div>
+        </div>
+
+        <!-- Soru 3 -->
+        <div class="quiz-item">
+            <div class="quiz-question">3. Birim çemberde $\sin(90^\circ) + \cos(180^\circ)$ toplamı kaçtır?</div>
+            <div class="quiz-options">
+                <button class="q-opt" onclick="setAns(2, 'A', this)">A) 2</button>
+                <button class="q-opt" onclick="setAns(2, 'B', this)">B) 1</button>
+                <button class="q-opt" onclick="setAns(2, 'C', this)">C) 0</button>
+                <button class="q-opt" onclick="setAns(2, 'D', this)">D) -1</button>
+            </div>
+        </div>
+
+        <button onclick="evaluateQuiz()" class="btn-action">📊 Sınavı Tamamla ve Raporu Çıkar</button>
+
+        <!-- Sonuç Paneli -->
+        <div id="quiz-result" class="result-panel">
+            <h3 id="res-score" style="color:#38bdf8; font-size:1.2em; margin-bottom:6px;"></h3>
+            <p id="res-feedback" style="font-size:0.85em; color:#e2e8f0; margin-bottom:12px;"></p>
+            <a id="res-wa-btn" href="#" target="_blank" class="btn-whatsapp">
+                💬 Analiz Raporumu Hocaya İlet & Yol Haritası Çıkar
+            </a>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    const MY_PHONE_NUMBER = "905356851445"; // Kendi numaranı yaz
+
+    // Sınav Sistemi Mantığı
+    let userAnswers = [null, null, null];
+    const key = ['B', 'A', 'C'];
+    const topics = ['Doğrusal Fonksiyonlar', 'AYT Parabol Tepe Noktası', 'Trigonometri Birim Çember'];
+
+    function setAns(qIdx, opt, btn) {
+        userAnswers[qIdx] = opt;
+        const parent = btn.parentElement;
+        parent.querySelectorAll('.q-opt').forEach(b => b.classList.remove('selected'));
+        btn.classList.add('selected');
+    }
+
+    function evaluateQuiz() {
+        if(userAnswers.includes(null)) {
+            alert("Lütfen tüm soruları işaretleyiniz!");
+            return;
+        }
+
+        let correctCount = 0;
+        let missedTopics = [];
+
+        userAnswers.forEach((ans, i) => {
+            if(ans === key[i]) correctCount++;
+            else missedTopics.push(topics[i]);
+        });
+
+        const panel = document.getElementById('quiz-result');
+        const scoreText = document.getElementById('res-score');
+        const feedText = document.getElementById('res-feedback');
+        const waBtn = document.getElementById('res-wa-btn');
+
+        panel.style.display = 'block';
+        scoreText.innerText = `Skor: 3 Soruda ${correctCount} Doğru`;
+
+        let feedback = "";
+        if(correctCount === 3) {
+            feedback = "Tebrikler! Temel analiz becerin oldukça kuvvetli. Şimdi derece sorularına geçiş yapabiliriz.";
+        } else {
+            feedback = `Odaklanılması Gereken Konular: ${missedTopics.join(', ')}. Bu eksikleri görsel simülasyonlarla çok kısa sürede kapatabiliriz.`;
+        }
+        feedText.innerText = feedback;
+
+        const waMsg = `Merhaba Hocam! Sitenizdeki Check-Up testini tamamladım.
+📊 Sonucum: 3 Soruda ${correctCount} 
