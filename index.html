@@ -3,291 +3,320 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Matematik Özel Ders | Kişisel Portfolyo</title>
+    <title>Hacettepeli Matematik | Yeni Nesil Özel Ders</title>
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #0f172a, #1e1b4b, #311042);
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: linear-gradient(135deg, #090d16, #111827, #1e1b4b);
             color: #f8fafc;
             min-height: 100vh;
             display: flex;
             flex-direction: column;
             align-items: center;
-            padding: 40px 20px;
+            padding: 30px 15px;
         }
-        .header { text-align: center; margin-bottom: 30px; }
+        .container { max-width: 550px; width: 100%; }
+        
+        /* Header */
+        .header { text-align: center; margin-bottom: 25px; }
         .badge {
             background: linear-gradient(90deg, #ec4899, #8b5cf6);
-            padding: 6px 16px;
+            padding: 6px 14px;
             border-radius: 20px;
-            font-size: 0.85em;
+            font-size: 0.8em;
             font-weight: bold;
             display: inline-block;
-            margin-bottom: 12px;
+            margin-bottom: 10px;
             text-transform: uppercase;
             letter-spacing: 1px;
         }
-        h1 { font-size: 2.3em; margin-bottom: 8px; }
-        .sub { color: #94a3b8; font-size: 1.1em; }
+        h1 { font-size: 2.1em; margin-bottom: 6px; }
+        .sub { color: #94a3b8; font-size: 1em; line-height: 1.4; }
 
         /* Kart Yapısı */
         .card {
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 20px;
-            padding: 25px;
-            max-width: 500px;
-            width: 100%;
-            margin-bottom: 25px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+            background: rgba(255, 255, 255, 0.04);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 18px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.3);
         }
-        .card-title { font-size: 1.3em; color: #38bdf8; margin-bottom: 15px; text-align: center; font-weight: bold; }
-        
-        /* Grafik Alanı */
+        .card-title { 
+            font-size: 1.15em; 
+            color: #38bdf8; 
+            margin-bottom: 12px; 
+            text-align: center; 
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        /* Sekmeler (Tab) */
+        .tabs { display: flex; gap: 8px; margin-bottom: 15px; }
+        .tab-btn {
+            flex: 1;
+            padding: 8px;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            color: #94a3b8;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.85em;
+            transition: 0.2s;
+        }
+        .tab-btn.active { background: #8b5cf6; color: white; border-color: #a78bfa; }
+
+        /* Canvas & Formül */
         canvas {
-            background: #090d16;
-            border-radius: 12px;
-            border: 1px solid #334155;
+            background: #060911;
+            border-radius: 10px;
+            border: 1px solid #1e293b;
             display: block;
-            margin: 0 auto 15px auto;
+            margin: 0 auto 12px auto;
+            width: 100%;
+            max-width: 360px;
+            height: 200px;
         }
         .formula {
-            font-size: 1.3em;
+            font-size: 1.25em;
             font-weight: bold;
             color: #f43f5e;
             text-align: center;
-            margin-bottom: 15px;
+            margin-bottom: 12px;
             font-family: monospace;
+            background: rgba(0,0,0,0.3);
+            padding: 6px;
+            border-radius: 6px;
         }
         .control-group {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin: 10px 0;
-            font-size: 0.9em;
+            margin: 8px 0;
+            font-size: 0.85em;
         }
         input[type=range] {
             flex-grow: 1;
-            margin: 0 15px;
+            margin: 0 12px;
             accent-color: #8b5cf6;
             cursor: pointer;
         }
 
-        /* Quiz Alanı */
-        .quiz-q { margin-bottom: 15px; font-weight: 500; font-size: 1em; }
-        .options { display: flex; flex-direction: column; gap: 8px; margin-top: 8px; }
-        .option-btn {
-            background: rgba(255,255,255,0.08);
-            border: 1px solid rgba(255,255,255,0.2);
-            color: white;
-            padding: 10px;
-            border-radius: 8px;
-            cursor: pointer;
-            text-align: left;
-            transition: 0.2s;
+        /* Paket Kartları */
+        .package {
+            background: rgba(255,255,255,0.03);
+            border-left: 4px solid #8b5cf6;
+            padding: 12px;
+            border-radius: 0 10px 10px 0;
+            margin-bottom: 10px;
         }
-        .option-btn:hover { background: rgba(255,255,255,0.2); }
-        .option-btn.selected { background: #8b5cf6; border-color: #a78bfa; }
-        
-        /* WhatsApp Butonu */
+        .package-title { font-weight: bold; color: #f8fafc; font-size: 0.95em; }
+        .package-desc { font-size: 0.8em; color: #94a3b8; margin-top: 3px; }
+
+        /* Buton */
         .btn-whatsapp {
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 10px;
+            gap: 8px;
             background: #22c55e;
             color: white;
             text-decoration: none;
-            padding: 15px 25px;
+            padding: 14px 20px;
             border-radius: 50px;
             font-weight: bold;
-            font-size: 1.05em;
-            transition: 0.3s ease;
+            font-size: 1em;
+            transition: 0.3s;
             box-shadow: 0 10px 20px rgba(34, 197, 94, 0.3);
             width: 100%;
             border: none;
             cursor: pointer;
-            margin-top: 15px;
         }
-        .btn-whatsapp:hover {
-            background: #16a34a;
-            transform: translateY(-2px);
-        }
-        .result-box {
-            text-align: center;
-            padding: 15px;
-            background: rgba(56, 189, 248, 0.1);
-            border-radius: 10px;
-            border: 1px solid #38bdf8;
-            margin-top: 15px;
-            display: none;
-        }
+        .btn-whatsapp:hover { background: #16a34a; transform: translateY(-2px); }
     </style>
 </head>
 <body>
 
+<div class="container">
+
+    <!-- Header -->
     <div class="header">
-        <div class="badge">🚀 Yeni Nesil Matematik Eğitimi</div>
-        <h1>📐 Hacettepeli Matematik Hocası</h1>
+        <div class="badge">🚀 Matematik + Teknoloji</div>
+        <h1>📐 Hacettepeli Hoca</h1>
         <p class="sub">Hacettepe Üniversitesi Matematik Öğretmenliği</p>
-        <p style="margin-top: 5px; color: #cbd5e1; font-size: 0.95em;">Formülleri ezberletmiyorum, görselleştirip mantığını kavratıyorum.</p>
+        <p style="margin-top: 6px; color: #38bdf8; font-size: 0.88em; font-weight: 500;">
+            "Ezber geçicidir, mantık ve görselleştirme kalıcıdır."
+        </p>
     </div>
 
-    <!-- 1. KART: İnteraktif Grafik Laboratuvarı -->
+    <!-- İnteraktif Laboratuvar -->
     <div class="card">
-        <div class="card-title">🔬 İnteraktif Fonksiyon Simülasyonu</div>
+        <div class="card-title">🔬 İnteraktif Matematik Laboratuvarı</div>
+        
+        <div class="tabs">
+            <button class="tab-btn active" onclick="switchMode('linear')">Doğru Denklemi</button>
+            <button class="tab-btn" onclick="switchMode('parabola')">AYT Parabol</button>
+        </div>
+
         <div class="formula" id="formula-text">y = 1x + 0</div>
-        
-        <canvas id="graph" width="340" height="200"></canvas>
+        <canvas id="graph" width="360" height="200"></canvas>
 
-        <div class="control-group">
-            <span>Eğim (m):</span>
-            <input type="range" id="slope" min="-5" max="5" step="0.5" value="1">
-            <span id="slope-val">1</span>
+        <!-- Doğru Kontrolleri -->
+        <div id="linear-controls">
+            <div class="control-group">
+                <span>Eğim (m):</span>
+                <input type="range" id="slope" min="-4" max="4" step="0.5" value="1">
+                <span id="slope-val">1</span>
+            </div>
+            <div class="control-group">
+                <span>Kesişim (b):</span>
+                <input type="range" id="intercept" min="-40" max="40" step="5" value="0">
+                <span id="intercept-val">0</span>
+            </div>
         </div>
 
-        <div class="control-group">
-            <span>Kesişim (b):</span>
-            <input type="range" id="intercept" min="-50" max="50" step="5" value="0">
-            <span id="intercept-val">0</span>
+        <!-- Parabol Kontrolleri (Başlangıçta Gizli) -->
+        <div id="parabola-controls" style="display: none;">
+            <div class="control-group">
+                <span>Kollar (a):</span>
+                <input type="range" id="param-a" min="-0.08" max="0.08" step="0.01" value="0.02">
+                <span id="a-val">0.02</span>
+            </div>
+            <div class="control-group">
+                <span>Tepe X (r):</span>
+                <input type="range" id="param-r" min="-50" max="50" step="5" value="0">
+                <span id="r-val">0</span>
+            </div>
+            <div class="control-group">
+                <span>Tepe Y (k):</span>
+                <input type="range" id="param-k" min="-50" max="50" step="5" value="-20">
+                <span id="k-val">-20</span>
+            </div>
         </div>
     </div>
 
-    <!-- 2. KART: Akıllı Seviye Testi -->
+    <!-- Ders Paketleri -->
     <div class="card">
-        <div class="card-title">🎯 1 Dakikalık Matematik Check-Up</div>
+        <div class="card-title">📚 Çalışma Programları</div>
         
-        <div id="quiz-container">
-            <div class="quiz-q">
-                1. $f(x) = 2x + 4$ ise bu doğrunun eğimi kaçtır?
-                <div class="options">
-                    <button class="option-btn" onclick="selectAnswer(0, 4, this)">A) 4</button>
-                    <button class="option-btn" onclick="selectAnswer(0, 2, this)">B) 2</button>
-                    <button class="option-btn" onclick="selectAnswer(0, 0, this)">C) 0</button>
-                </div>
-            </div>
-
-            <div class="quiz-q">
-                2. Bir üçgenin iç açıları toplamı kaç derecedir?
-                <div class="options">
-                    <button class="option-btn" onclick="selectAnswer(1, 180, this)">A) 180°</button>
-                    <button class="option-btn" onclick="selectAnswer(1, 360, this)">B) 360°</button>
-                    <button class="option-btn" onclick="selectAnswer(1, 90, this)">C) 90°</button>
-                </div>
-            </div>
-
-            <button onclick="calculateResult()" class="btn-whatsapp" style="background:#8b5cf6; margin-top:10px;">📊 Seviyemi Analiz Et</button>
+        <div class="package">
+            <div class="package-title">🎯 TYT / AYT Derece ve Net Artırma</div>
+            <div class="package-desc">Yeni nesil soruların mantığı, görsel geometri ve hız kazandıran analiz taktikleri.</div>
         </div>
 
-        <div id="result-box" class="result-box">
-            <h3 id="result-title" style="color:#38bdf8;"></h3>
-            <p id="result-desc" style="font-size:0.9em; margin: 8px 0; color:#e2e8f0;"></p>
-            <a id="wa-link" href="#" target="_blank" class="btn-whatsapp">
-                💬 Sonucumu Hocaya Gönder & Ders Planla
-            </a>
+        <div class="package" style="border-left-color: #38bdf8;">
+            <div class="package-title">🧱 Sıfırdan Temel İnşa (Lise / Ortaokul)</div>
+            <div class="package-desc">Matematik önyargısını kıran, adım adım ezbersiz konu kavrama sistemi.</div>
+        </div>
+
+        <div class="package" style="border-left-color: #ec4899;">
+            <div class="package-title">⚡ VIP Birebir Soru Çözüm & Koçluk</div>
+            <div class="package-desc">Haftalık hedef takibi, eksik analizi ve 7/24 WhatsApp soru destek hattı.</div>
         </div>
     </div>
 
-    <script>
-        // 905356851445
-        const MY_PHONE_NUMBER = "905356851445"; 
+    <!-- İletişim Butonu -->
+    <a href="https://wa.me/905555555555?text=Merhaba%20Hocam,%20web%20sitenizdeki%20interaktif%20sistemi%20inceledim.%20Özel%20ders%20için%20tanışma%20randevusu%20almak%20istiyorum." target="_blank" class="btn-whatsapp">
+        💬 Tanışma Dersi & Randevu Planla
+    </a>
 
-        // --- GRAFİK MOTORU ---
-        const canvas = document.getElementById('graph');
-        const ctx = canvas.getContext('2d');
-        const slopeInput = document.getElementById('slope');
-        const interceptInput = document.getElementById('intercept');
-        const formulaText = document.getElementById('formula-text');
-        const slopeVal = document.getElementById('slope-val');
-        const interceptVal = document.getElementById('intercept-val');
+</div>
 
-        function draw() {
-            const m = parseFloat(slopeInput.value);
-            const b = parseFloat(interceptInput.value);
-            slopeVal.innerText = m;
-            interceptVal.innerText = b;
-            formulaText.innerText = `y = ${m}x ${b >= 0 ? '+ ' + b : '- ' + Math.abs(b)}`;
+<script>
+    let mode = 'linear';
+    const canvas = document.getElementById('graph');
+    const ctx = canvas.getContext('2d');
 
-            const width = canvas.width, height = canvas.height;
-            const cx = width / 2, cy = height / 2;
+    const slope = document.getElementById('slope');
+    const intercept = document.getElementById('intercept');
+    const paramA = document.getElementById('param-a');
+    const paramR = document.getElementById('param-r');
+    const paramK = document.getElementById('param-k');
+    const formula = document.getElementById('formula-text');
 
-            ctx.clearRect(0, 0, width, height);
+    function switchMode(newMode) {
+        mode = newMode;
+        document.querySelectorAll('.tab-btn').forEach((b, i) => {
+            b.classList.toggle('active', (i === 0 && mode === 'linear') || (i === 1 && mode === 'parabola'));
+        });
+        document.getElementById('linear-controls').style.display = mode === 'linear' ? 'block' : 'none';
+        document.getElementById('parabola-controls').style.display = mode === 'parabola' ? 'block' : 'none';
+        draw();
+    }
 
-            ctx.strokeStyle = '#1e293b';
-            ctx.lineWidth = 1;
-            for(let x=0; x<=width; x+=20) { ctx.beginPath(); ctx.moveTo(x,0); ctx.lineTo(x,height); ctx.stroke(); }
-            for(let y=0; y<=height; y+=20) { ctx.beginPath(); ctx.moveTo(0,y); ctx.lineTo(width,y); ctx.stroke(); }
+    function draw() {
+        const w = canvas.width, h = canvas.height;
+        const cx = w / 2, cy = h / 2;
 
-            ctx.strokeStyle = '#64748b';
-            ctx.lineWidth = 2;
-            ctx.beginPath();
-            ctx.moveTo(cx, 0); ctx.lineTo(cx, height);
-            ctx.moveTo(0, cy); ctx.lineTo(width, cy);
-            ctx.stroke();
+        ctx.clearRect(0, 0, w, h);
+
+        // Izgara
+        ctx.strokeStyle = '#1e293b';
+        ctx.lineWidth = 1;
+        for(let x=0; x<=w; x+=20) { ctx.beginPath(); ctx.moveTo(x,0); ctx.lineTo(x,h); ctx.stroke(); }
+        for(let y=0; y<=h; y+=20) { ctx.beginPath(); ctx.moveTo(0,y); ctx.lineTo(w,y); ctx.stroke(); }
+
+        // Eksenler
+        ctx.strokeStyle = '#475569';
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.moveTo(cx, 0); ctx.lineTo(cx, h);
+        ctx.moveTo(0, cy); ctx.lineTo(w, cy);
+        ctx.stroke();
+
+        ctx.lineWidth = 3;
+
+        if (mode === 'linear') {
+            const m = parseFloat(slope.value);
+            const b = parseFloat(intercept.value);
+            document.getElementById('slope-val').innerText = m;
+            document.getElementById('intercept-val').innerText = b;
+            formula.innerText = `y = ${m}x ${b >= 0 ? '+ ' + b : '- ' + Math.abs(b)}`;
 
             ctx.strokeStyle = '#ec4899';
-            ctx.lineWidth = 3;
             ctx.beginPath();
             for (let px = -cx; px <= cx; px++) {
                 let py = (m * px) + b;
-                let canvasX = cx + px;
-                let canvasY = cy - py;
-                if (px === -cx) ctx.moveTo(canvasX, canvasY);
-                else ctx.lineTo(canvasX, canvasY);
+                if (px === -cx) ctx.moveTo(cx + px, cy - py);
+                else ctx.lineTo(cx + px, cy - py);
             }
             ctx.stroke();
-        }
-        slopeInput.addEventListener('input', draw);
-        interceptInput.addEventListener('input', draw);
-        draw();
+        } else {
+            const a = parseFloat(paramA.value);
+            const r = parseFloat(paramR.value);
+            const k = parseFloat(paramK.value);
+            document.getElementById('a-val').innerText = a;
+            document.getElementById('r-val').innerText = r;
+            document.getElementById('k-val').innerText = k;
+            
+            formula.innerText = `y = ${a}(x - ${r})² ${k >= 0 ? '+ ' + k : '- ' + Math.abs(k)}`;
 
-        // --- QUIZ MOTORU ---
-        let answers = [null, null];
-        const correctAnswers = [2, 180];
-
-        function selectAnswer(qIndex, value, btn) {
-            answers[qIndex] = value;
-            const parent = btn.parentElement;
-            const buttons = parent.querySelectorAll('.option-btn');
-            buttons.forEach(b => b.classList.remove('selected'));
-            btn.classList.add('selected');
-        }
-
-        function calculateResult() {
-            if(answers[0] === null || answers[1] === null) {
-                alert("Lütfen tüm soruları cevaplayın!");
-                return;
+            ctx.strokeStyle = '#38bdf8';
+            ctx.beginPath();
+            for (let px = -cx; px <= cx; px++) {
+                let py = a * Math.pow(px - r, 2) + k;
+                if (px === -cx) ctx.moveTo(cx + px, cy - py);
+                else ctx.lineTo(cx + px, cy - py);
             }
+            ctx.stroke();
 
-            let score = 0;
-            if(answers[0] === correctAnswers[0]) score++;
-            if(answers[1] === correctAnswers[1]) score++;
-
-            let level = "";
-            let desc = "";
-
-            if(score === 2) {
-                level = "İleri / Hedefi Yüksek Seviye 🚀";
-                desc = "Temel kavramlara gayet hakimsin! Artık yeni nesil ve derece sorularına odaklanmalıyız.";
-            } else if(score === 1) {
-                level = "Gelişime Açık Orta Seviye 📈";
-                desc = "Bazı kavramlar oturmuş ama pratik eksiğin var. Birlikte netlerini hızla katlayabiliriz.";
-            } else {
-                level = "Temelden Başlama Seviyesi 🧱";
-                desc = "Hiç sorun değil! Matematiği görsel ve mantık odaklı sıfırdan inşa edeceğiz.";
-            }
-
-            document.getElementById('result-title').innerText = "Sonuç: " + level;
-            document.getElementById('result-desc').innerText = desc;
-            document.getElementById('result-box').style.display = "block";
-
-            // WhatsApp Dinamik Mesajı Hazırla
-            const customMessage = `Merhaba Hocam! Sitenizdeki seviye testini çözdüm. Sonucum: ${level}. Özel ders ve çalışma programı hakkında bilgi alabilir miyim?`;
-            const waUrl = `https://wa.me/${MY_PHONE_NUMBER}?text=${encodeURIComponent(customMessage)}`;
-            document.getElementById('wa-link').href = waUrl;
+            // Tepe Noktası Göstergesi
+            ctx.fillStyle = '#f43f5e';
+            ctx.beginPath();
+            ctx.arc(cx + r, cy - k, 5, 0, Math.PI * 2);
+            ctx.fill();
         }
-    </script>
+    }
+
+    [slope, intercept, paramA, paramR, paramK].forEach(el => el.addEventListener('input', draw));
+    draw();
+</script>
+
 </body>
 </html>
