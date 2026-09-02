@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hacettepeli Matematik | Yeni Nesil Özel Ders</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: linear-gradient(135deg, #090d16, #111827, #1e1b4b);
+            color: #f8fafc;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 25px 15px;
+        }
+        .container { max-width: 520px; width: 100%; }
+        
+        .header { text-align: center; margin-bottom: 20px; }
+        .badge {
+            background: linear-gradient(90deg, #ec4899, #8b5cf6);
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 0.8em;
+            font-weight: bold;
+            display: inline-block;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        h1 { font-size: 2em; margin-bottom: 5px; }
+        .sub { color: #94a3b8; font-size: 0.95em; }
+
+        .card {
+            background: rgba(255, 255, 255, 0.04);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 18px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.3);
+        }
+        .card-title { 
+            font-size: 1.15em; 
+            color: #38bdf8; 
+            margin-bottom: 15px; 
+            text-align: center; 
+            font-weight: 700;
+        }
+
+        .tabs { display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px; margin-bottom: 15px; }
+        .tab-btn {
+            padding: 8px 2px;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            color: #94a3b8;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.75em;
+            transition: 0.2s;
+            text-align: center;
+        }
+        .tab-btn.active { background: #8b5cf6; color: white; border-color: #a78bfa; }
+
+        canvas {
+            background: #060911;
+            border-radius: 10px;
+            border: 1px solid #1e293b;
+            display: block;
+            margin: 0 auto 12px auto;
+            width: 100%;
+            max-width: 360px;
+            height: 220px;
+        }
+        .formula {
+            font-size: 1.1em;
+            font-weight: bold;
+            color: #f43f5e;
+            text-align: center;
+            margin-bottom: 12px;
+            font-family: monospace;
+            background: rgba(0,0,0,0.3);
+            padding: 8px;
+            border-radius: 6px;
+        }
+        .control-group {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 8px 0;
+            font-size: 0.85em;
+        }
+        input[type=range] {
+            flex-grow: 1;
+            margin: 0 12px;
+            accent-color: #8b5cf6;
+            cursor: pointer;
+        }
+
+        /* Konu Takip Çizelgesi */
+        .progress-bar-bg {
+            background: rgba(255,255,255,0.1);
+            height: 12px;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 15px;
+        }
+        .progress-bar-fill {
+            background: linear-gradient(90deg, #ec4899, #8b5cf6);
+            height: 100%;
+            width: 0%;
+            transition: 0.4s ease;
+        }
+        .checklist-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            font-size: 0.9em;
+            cursor: pointer;
+        }
+        .checklist-item input { accent-color: #8b5cf6; cursor: pointer; transform: scale(1.2); }
+
+        /* Form */
+        .form-group { margin-bottom: 12px; }
+        label { display: block; font-size: 0.85em; color: #94a3b8; margin-bottom: 5px; }
+        select {
+            width: 100%;
+            padding: 10px;
+            background: rgba(0,0,0,0.3);
+            border: 1px solid #334155;
+            border-radius: 8px;
+            color: white;
+            font-size: 0.9em;
+            outline: none;
+        }
+        select:focus { border-color: #8b5cf6; }
+
+        .btn-whatsapp {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            background: #22c55e;
+            color: white;
+            text-decoration: none;
+            padding: 14px 20px;
+            border-radius: 50px;
+            font-weight: bold;
+            font-size: 1em;
+            transition: 0.3s;
+            box-shadow: 0 10px 20px rgba(34, 197, 94, 0.3);
+            width: 100%;
+            border: none;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        .btn-whatsapp:hover { background: #16a34a; transform: translateY(-2px); }
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+    <div class="header">
+        <div class="badge">🚀 Matematik + Teknoloji</div>
+        <h1>📐 Hacettepeli Hoca</h1>
+        <p class="sub">Hacettepe Üniversitesi Matematik Öğretmenliği</p>
+    </div>
+
+    <!-- 1. KART: İnteraktif Laboratuvar (4 Modlu) -->
+    <div class="card">
+        <div class="card-title">🔬 İnteraktif Deney Laboratuvarı</div>
+        
+        <div class="tabs">
+            <button class="tab-btn active" onclick="switchMode('linear')">Doğru</button>
+            <button class="tab-btn" onclick="switchMode('parabola')">Parabol</button>
+            <button class="tab-btn" onclick="switchMode('trig')">Trigonometri</button>
+            <button class="tab-btn" onclick="switchMode('pythagoras')">Pisagor</button>
+        </div>
+
+        <div class="formula" id="formula-text">y = 1x + 0</div>
+        <canvas id="graph" width="360" height="220"></canvas>
+
+        <!-- Doğru -->
+        <div id="linear-controls">
+            <div class="control-group">
+                <span>Eğim (m):</span>
+                <input type="range" id="slope" min="-4" max="4" step="0.5" value="1">
+                <span id="slope-val">1</span>
+            </div>
+            <div class="control-group">
+                <span>Kesişim (b):</span>
+                <input type="range" id="intercept" min="-40" max="40" step="5" value="0">
+                <span id="intercept-val">0</span>
+            </div>
+        </div>
+
+        <!-- Parabol -->
+        <div id="parabola-controls" style="display: none;">
+            <div class="control-group">
+                <span>Kollar (a):</span>
+                <input type="range" id="param-a" min="-0.08" max="0.08" step="0.01" value="0.02">
+                <span id="a-val">0.02</span>
+            </div>
+            <div class="control-group">
+                <span>Tepe X (r):</span>
+                <input type="range" id="param-r" min="-50" max="50" step="5" value="0">
+                <span id="r-val">0</span>
+            </div>
+            <div class="control-group">
+                <span>Tepe Y (k):</span>
+                <input type="range" id="param-k" min="-50" max="50" step="5" value="-20">
+                <span id="k-val">-20</span>
+            </div>
+        </div>
+
+        <!-- Trigonometri -->
+        <div id="trig-controls" style="display: none;">
+            <div class="control-group">
+                <span>Açı (θ):</span>
+                <input type="range" id="param-angle" min="0" max="360" step="5" value="45">
+                <span id="angle-val">45°</span>
+            </div>
+        </div>
+
+        <!-- Pisagor -->
+        <div id="pythagoras-controls" style="display: none;">
+            <div class="control-group">
+                <span>Taban (a):</span>
+                <input type="range" id="param-base" min="30" max="140" step="5" value="80">
+                <span id="base-val">80</span>
+            </div>
+            <div class="control-group">
+                <span>Yükseklik (b):</span>
+                <input type="range" id="param-height" min="30" max="120" step="5" value="60">
+                <span id="height-val">60</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- 2. KART: TYT-AYT Hedef Takipçisi -->
+    <div class="card">
+        <div class="card-title">📊 YKS Konu Hakimiyet Takipçisi</div>
+        <div style="display:flex; justify-content:space-between; font-size:0.85em; margin-bottom:6px;">
+            <span>İlerleme Durumu</span>
+            <span id="progress-percent" style="font-weight:bold; color:#38bdf8;">%0</span>
+        </div>
+        <div class="progress-bar-bg">
+            <div class="progress-bar-fill" id="progress-bar"></div>
+        </div>
+
+        <div id="checklist">
+            <label class="checklist-item"><input type="checkbox" onchange="updateProgress()"> 1. Temel Kavramlar & Sayı Kümeleri</label>
+            <label class="checklist-item"><input type="checkbox" onchange="updateProgress()"> 2. Denklem & Eşitsizlik Sistemleri</label>
+            <label class="checklist-item"><input type="checkbox" onchange="updateProgress()"> 3. Fonksiyonlar & Grafikler</label>
+            <label class="checklist-item"><input type="checkbox" onchange="updateProgress()"> 4. Parabol & 2. Dereceden Denklemler</label>
+            <label class="checklist-item"><input type="checkbox" onchange="updateProgress()"> 5. Trigonometri (Birim Çember & Teoremler)</label>
+            <label class="checklist-item"><input type="checkbox" onchange="updateProgress()"> 6. Türev & İntegrale Giriş</label>
+        </div>
+    </div>
+
+    <!-- 3. KART: Randevu Formu -->
+    <div class="card">
+        <div class="card-title">📅 Ücretsiz Tanışma Dersi Planla</div>
+        
+        <div class="form-group">
+            <label>Öğrenci Sınıfı / Düzeyi:</label>
+            <select id="student-level">
+                <option value="TYT - AYT Hazırlık (YKS)">TYT - AYT Hazırlık (YKS)</option>
+                <option value="11. Sınıf (Okul + YKS Temel)">11. Sınıf (Okul + YKS Temel)</option>
+                <option value="9 - 10. Sınıf Temel Sağlamlaştırma">9 - 10. Sınıf Temel Sağlamlaştırma</option>
+                <option value="LGS Hazırlık (8. Sınıf)">LGS Hazırlık (8. Sınıf)</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label>Tercih Ettiğiniz Zaman Dilimi:</label>
+            <select id="preferred-time">
+                <option value="Hafta İçi Akşam (18:00 - 21:00)">Hafta İçi Akşam (18:00 - 21:00)</option>
+                <option value="Hafta Sonu Öğleden Önce">Hafta Sonu Öğleden Önce</option>
+                <option value="Hafta Sonu Öğleden Sonra">Hafta Sonu Öğleden Sonra</option>
+            </select>
+        </div>
+
+        <button onclick="sendAppointment()" class="btn-whatsapp">
+            💬 Randevuyu WhatsApp ile İlet
+        </button>
+    </div>
+
+</div>
+
+<script>
+    const MY_PHONE_NUMBER = "905356851445"; // Kendi numaranı yaz
+
+    let mode = 'linear';
+    const canvas = document.getElementById('graph');
+    const ctx = canvas.getContext('2d');
+
+    const slope = document.getElementById('slope');
+    const intercept = document.getElementById('intercept');
+    const paramA = document.getElementById('param-a');
+    const paramR = document.getElementById('param-r');
+    const paramK = document.getElementById('param-k');
+    const paramAngle = document.getElementById('param-angle');
+    const paramBase = document.getElementById('param-base');
+    const paramHeight = document.getElementById('param-height');
+    const formula = document.getElementById('formula-text');
+
+    function switchMode(newMode) {
+        mode = newMode;
+        document.querySelectorAll('.tab-btn').forEach((b, i) => {
+            b.classList.toggle('active', 
+                (i === 0 && mode === 'linear') || 
+                (i === 1 && mode === 'parabola') || 
+                (i === 2 && mode === 'trig') ||
+                (i === 3 && mode === 'pythagoras')
+            );
+        });
+
+        document.getElementById('linear-controls').style.display = mode === 'linear' ? 'block' : 'none';
+        document.getElementById('parabola-controls').style.display = mode === 'parabola' ? 'block' : 'none';
+        document.getElementById('trig-controls').style.display = mode === 'trig' ? 'block' : 'none';
+        document.getElementById('pythagoras-controls').style.display = mode === 'pythagoras' ? 'block' : 'none';
+        draw();
+    }
+
+    function draw() {
+        const w = canvas.width, h = canvas.height;
+        const cx = w / 2, cy = h / 2;
+
+        ctx.clearRect(0, 0, w, h);
+
+        // Izgara
+        ctx.strokeStyle = '#1e293b';
+        ctx.lineWidth = 1;
+        for(let x=0; x<=w; x+=20) { ctx.beginPath(); ctx.moveTo(x,0); ctx.lineTo(x,h); ctx.stroke(); }
+        for(let y=0; y<=h; y+=20) { ctx.beginPath(); ctx.moveTo(0,y); ctx.lineTo(w,y); ctx.stroke(); }
+
+        if (mode === 'linear' || mode === 'parabola') {
+            ctx.strokeStyle = '#475569';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.moveTo(cx, 0); ctx.lineTo(cx, h);
+            ctx.moveTo(0, cy); ctx.lineTo(w, cy);
+            ctx.stroke();
+        }
+
+        ctx.lineWidth = 3;
+
+        if (mode === 'linear') {
+            const m = parseFloat(slope.value);
+            const b = parseFloat(intercept.value);
+            document.getElementById('slope-val').innerText = m;
+            document.getElementById('intercept-val').innerText = b;
+            formula.innerText = `y = ${m}x ${b >= 0 ? '+ ' + b : '- ' + Math.abs(b)}`;
+
+            ctx.strokeStyle = '#ec4899';
+            ctx.beginPath();
+            for (let px = -cx; px <= cx; px++) {
+                let py = (m * px) + b;
+                if (px === -cx) ctx.moveTo(cx + px, cy - py);
+                else ctx.lineTo(cx + px, cy - py);
+            }
+            ctx.stroke();
+
+        } else if (mode === 'parabola') {
+            const a = parseFloat(paramA.value);
+            const r = parseFloat(paramR.value);
+            const k = parseFloat(paramK.value);
+            document.getElementById('a-val').innerText = a;
+            document.getElementById('r-val').innerText = r;
+            document.getElementById('k-val').innerText = k;
+            
+            formula.innerText = `y = ${a}(x - ${r})² ${k >= 0 ? '+ ' + k : '- ' + Math.abs(k)}`;
+
+            ctx.strokeStyle = '#38bdf8';
+            ctx.beginPath();
+            for (let px = -cx; px <= cx; px++) {
+                let py = a * Math.pow(px - r, 2) + k;
+                if (px === -cx) ctx.moveTo(cx + px, cy - py);
+                else ctx.lineTo(cx + px, cy - py);
+            }
+            ctx.stroke();
+
+            ctx.fillStyle = '#f43f5e';
+            ctx.beginPath();
+            ctx.arc(cx + r, cy - k, 5, 0, Math.PI * 2);
+            ctx.fill();
+
+        } else if (mode === 'trig') {
+            const deg = parseFloat(paramAngle.value);
+            const rad = deg * (Math.PI / 180);
+            const R = 75;
+
+            document.getElementById('angle-val').innerText = `${deg}°`;
+            formula.innerText = `θ: ${deg}° | cos: ${Math.cos(rad).toFixed(2)} | sin: ${Math.sin(rad).toFixed(2)}`;
+
+            ctx.strokeStyle = '#64748b';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.arc(cx, cy, R, 0, Math.PI * 2);
+            ctx.stroke();
+
+            const px = cx + R * Math.cos(rad);
+            const py = cy - R * Math.sin(rad);
+
+            ctx.strokeStyle = '#38bdf8';
+            ctx.beginPath(); ctx.moveTo(cx, cy); ctx.lineTo(px, cy); ctx.stroke();
+
+            ctx.strokeStyle = '#22c55e';
+            ctx.beginPath(); ctx.moveTo(px, cy); ctx.lineTo(px, py); ctx.stroke();
+
+            ctx.strokeStyle = '#f8fafc';
+            ctx.beginPath(); ctx.moveTo(cx, cy); ctx.lineTo(px, py); ctx.stroke();
+
+            ctx.fillStyle = '#ec4899';
+            ctx.beginPath(); ctx.arc(px, py, 6, 0, Math.PI * 2); ctx.fill();
+
+        } else if (mode === 'pythagoras') {
+            const a = parseFloat(paramBase.value);
+            const b = parseFloat(paramHeight.value);
+            const c = Math.sqrt(a * a + b * b).toFixed(1);
+
+            document.getElementById('base-val').innerText = a;
+            document.getElementById('height-val').innerText = b;
+            formula.innerText = `a² + b² = c² ➔ ${a}² + ${b}² = (${c})²`;
+
+            const startX = 70;
+            const startY = 170;
+
+            // Dik Üçgen Çizimi
+            ctx.strokeStyle = '#8b5cf6';
+            ctx.lineWidth = 3;
+            ctx.beginPath();
+            ctx.moveTo(startX, startY);
+            ctx.lineTo(startX + a, startY); // Taban (a)
+            ctx.lineTo(startX, startY - b); // Hipotenüs (c)
+            ctx.closePath(); // Yükseklik (b)
+            ctx.stroke();
+
+            ctx.fillStyle = 'rgba(139, 92, 246, 0.15)';
+            ctx.fill();
+
+            // Dik açı işareti
+            ctx.strokeStyle = '#f43f5e';
+            ctx.lineWidth = 1.5;
+            ctx.strokeRect(startX, startY - 15, 15, 15);
+        }
+    }
+
+    function updateProgress() {
+        const checkboxes = document.querySelectorAll('#checklist input[type="checkbox"]');
+        const checked = document.querySelectorAll('#checklist input[type="checkbox"]:checked');
+        const percent = Math.round((checked.length / checkboxes.length) * 100);
+        
+        document.getElementById('progress-bar').style.width = percent + '%';
+        document.getElementById('progress-percent').innerText = '%' + percent;
+    }
+
+    function sendAppointment() {
+        const level = document.getElementById('student-level').value;
+        const time = document.getElementById('preferred-time').value;
+
+        const message = `Merhaba Hocam! Web siteniz üzerinden ulaşıyorum.
+📚 Öğrenci Düzeyi: ${level}
+⏰ Tercih Edilen Zaman: ${time}
+
+Ücretsiz tanışma ve seviye analizi dersi planlamak istiyorum.`;
+
+        window.open(`https://wa.me/${MY_PHONE_NUMBER}?text=${encodeURIComponent(message)}`, '_blank');
+    }
+
+    [slope, intercept, paramA, paramR, paramK, paramAngle, paramBase, paramHeight].forEach(el => el.addEventListener('input', draw));
+    draw();
+</script>
+
+</body>
+</html>
