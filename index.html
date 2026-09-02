@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Matematik Özel Ders | Kişisel Portfolyo</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0f172a, #1e1b4b, #311042);
+            color: #f8fafc;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 40px 20px;
+        }
+        .header { text-align: center; margin-bottom: 30px; }
+        .badge {
+            background: linear-gradient(90deg, #ec4899, #8b5cf6);
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: bold;
+            display: inline-block;
+            margin-bottom: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        h1 { font-size: 2.3em; margin-bottom: 8px; }
+        .sub { color: #94a3b8; font-size: 1.1em; }
+
+        /* Kart Yapısı */
+        .card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 25px;
+            max-width: 500px;
+            width: 100%;
+            margin-bottom: 25px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+        }
+        .card-title { font-size: 1.3em; color: #38bdf8; margin-bottom: 15px; text-align: center; font-weight: bold; }
+        
+        /* Grafik Alanı */
+        canvas {
+            background: #090d16;
+            border-radius: 12px;
+            border: 1px solid #334155;
+            display: block;
+            margin: 0 auto 15px auto;
+        }
+        .formula {
+            font-size: 1.3em;
+            font-weight: bold;
+            color: #f43f5e;
+            text-align: center;
+            margin-bottom: 15px;
+            font-family: monospace;
+        }
+        .control-group {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 10px 0;
+            font-size: 0.9em;
+        }
+        input[type=range] {
+            flex-grow: 1;
+            margin: 0 15px;
+            accent-color: #8b5cf6;
+            cursor: pointer;
+        }
+
+        /* Quiz Alanı */
+        .quiz-q { margin-bottom: 15px; font-weight: 500; font-size: 1em; }
+        .options { display: flex; flex-direction: column; gap: 8px; margin-top: 8px; }
+        .option-btn {
+            background: rgba(255,255,255,0.08);
+            border: 1px solid rgba(255,255,255,0.2);
+            color: white;
+            padding: 10px;
+            border-radius: 8px;
+            cursor: pointer;
+            text-align: left;
+            transition: 0.2s;
+        }
+        .option-btn:hover { background: rgba(255,255,255,0.2); }
+        .option-btn.selected { background: #8b5cf6; border-color: #a78bfa; }
+        
+        /* WhatsApp Butonu */
+        .btn-whatsapp {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            background: #22c55e;
+            color: white;
+            text-decoration: none;
+            padding: 15px 25px;
+            border-radius: 50px;
+            font-weight: bold;
+            font-size: 1.05em;
+            transition: 0.3s ease;
+            box-shadow: 0 10px 20px rgba(34, 197, 94, 0.3);
+            width: 100%;
+            border: none;
+            cursor: pointer;
+            margin-top: 15px;
+        }
+        .btn-whatsapp:hover {
+            background: #16a34a;
+            transform: translateY(-2px);
+        }
+        .result-box {
+            text-align: center;
+            padding: 15px;
+            background: rgba(56, 189, 248, 0.1);
+            border-radius: 10px;
+            border: 1px solid #38bdf8;
+            margin-top: 15px;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <div class="badge">🚀 Yeni Nesil Matematik Eğitimi</div>
+        <h1>📐 Hacettepeli Matematik Hocası</h1>
+        <p class="sub">Hacettepe Üniversitesi Matematik Öğretmenliği</p>
+        <p style="margin-top: 5px; color: #cbd5e1; font-size: 0.95em;">Formülleri ezberletmiyorum, görselleştirip mantığını kavratıyorum.</p>
+    </div>
+
+    <!-- 1. KART: İnteraktif Grafik Laboratuvarı -->
+    <div class="card">
+        <div class="card-title">🔬 İnteraktif Fonksiyon Simülasyonu</div>
+        <div class="formula" id="formula-text">y = 1x + 0</div>
+        
+        <canvas id="graph" width="340" height="200"></canvas>
+
+        <div class="control-group">
+            <span>Eğim (m):</span>
+            <input type="range" id="slope" min="-5" max="5" step="0.5" value="1">
+            <span id="slope-val">1</span>
+        </div>
+
+        <div class="control-group">
+            <span>Kesişim (b):</span>
+            <input type="range" id="intercept" min="-50" max="50" step="5" value="0">
+            <span id="intercept-val">0</span>
+        </div>
+    </div>
+
+    <!-- 2. KART: Akıllı Seviye Testi -->
+    <div class="card">
+        <div class="card-title">🎯 1 Dakikalık Matematik Check-Up</div>
+        
+        <div id="quiz-container">
+            <div class="quiz-q">
+                1. $f(x) = 2x + 4$ ise bu doğrunun eğimi kaçtır?
+                <div class="options">
+                    <button class="option-btn" onclick="selectAnswer(0, 4, this)">A) 4</button>
+                    <button class="option-btn" onclick="selectAnswer(0, 2, this)">B) 2</button>
+                    <button class="option-btn" onclick="selectAnswer(0, 0, this)">C) 0</button>
+                </div>
+            </div>
+
+            <div class="quiz-q">
+                2. Bir üçgenin iç açıları toplamı kaç derecedir?
+                <div class="options">
+                    <button class="option-btn" onclick="selectAnswer(1, 180, this)">A) 180°</button>
+                    <button class="option-btn" onclick="selectAnswer(1, 360, this)">B) 360°</button>
+                    <button class="option-btn" onclick="selectAnswer(1, 90, this)">C) 90°</button>
+                </div>
+            </div>
+
+            <button onclick="calculateResult()" class="btn-whatsapp" style="background:#8b5cf6; margin-top:10px;">📊 Seviyemi Analiz Et</button>
+        </div>
+
+        <div id="result-box" class="result-box">
+            <h3 id="result-title" style="color:#38bdf8;"></h3>
+            <p id="result-desc" style="font-size:0.9em; margin: 8px 0; color:#e2e8f0;"></p>
+            <a id="wa-link" href="#" target="_blank" class="btn-whatsapp">
+                💬 Sonucumu Hocaya Gönder & Ders Planla
+            </a>
+        </div>
+    </div>
+
+    <script>
+        // 905356851445
+        const MY_PHONE_NUMBER = "905356851445"; 
+
+        // --- GRAFİK MOTORU ---
+        const canvas = document.getElementById('graph');
+        const ctx = canvas.getContext('2d');
+        const slopeInput = document.getElementById('slope');
+        const interceptInput = document.getElementById('intercept');
+        const formulaText = document.getElementById('formula-text');
+        const slopeVal = document.getElementById('slope-val');
+        const interceptVal = document.getElementById('intercept-val');
+
+        function draw() {
+            const m = parseFloat(slopeInput.value);
+            const b = parseFloat(interceptInput.value);
+            slopeVal.innerText = m;
+            interceptVal.innerText = b;
+            formulaText.innerText = `y = ${m}x ${b >= 0 ? '+ ' + b : '- ' + Math.abs(b)}`;
+
+            const width = canvas.width, height = canvas.height;
+            const cx = width / 2, cy = height / 2;
+
+            ctx.clearRect(0, 0, width, height);
+
+            ctx.strokeStyle = '#1e293b';
+            ctx.lineWidth = 1;
+            for(let x=0; x<=width; x+=20) { ctx.beginPath(); ctx.moveTo(x,0); ctx.lineTo(x,height); ctx.stroke(); }
+            for(let y=0; y<=height; y+=20) { ctx.beginPath(); ctx.moveTo(0,y); ctx.lineTo(width,y); ctx.stroke(); }
+
+            ctx.strokeStyle = '#64748b';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.moveTo(cx, 0); ctx.lineTo(cx, height);
+            ctx.moveTo(0, cy); ctx.lineTo(width, cy);
+            ctx.stroke();
+
+            ctx.strokeStyle = '#ec4899';
+            ctx.lineWidth = 3;
+            ctx.beginPath();
+            for (let px = -cx; px <= cx; px++) {
+                let py = (m * px) + b;
+                let canvasX = cx + px;
+                let canvasY = cy - py;
+                if (px === -cx) ctx.moveTo(canvasX, canvasY);
+                else ctx.lineTo(canvasX, canvasY);
+            }
+            ctx.stroke();
+        }
+        slopeInput.addEventListener('input', draw);
+        interceptInput.addEventListener('input', draw);
+        draw();
+
+        // --- QUIZ MOTORU ---
+        let answers = [null, null];
+        const correctAnswers = [2, 180];
+
+        function selectAnswer(qIndex, value, btn) {
+            answers[qIndex] = value;
+            const parent = btn.parentElement;
+            const buttons = parent.querySelectorAll('.option-btn');
+            buttons.forEach(b => b.classList.remove('selected'));
+            btn.classList.add('selected');
+        }
+
+        function calculateResult() {
+            if(answers[0] === null || answers[1] === null) {
+                alert("Lütfen tüm soruları cevaplayın!");
+                return;
+            }
+
+            let score = 0;
+            if(answers[0] === correctAnswers[0]) score++;
+            if(answers[1] === correctAnswers[1]) score++;
+
+            let level = "";
+            let desc = "";
+
+            if(score === 2) {
+                level = "İleri / Hedefi Yüksek Seviye 🚀";
+                desc = "Temel kavramlara gayet hakimsin! Artık yeni nesil ve derece sorularına odaklanmalıyız.";
+            } else if(score === 1) {
+                level = "Gelişime Açık Orta Seviye 📈";
+                desc = "Bazı kavramlar oturmuş ama pratik eksiğin var. Birlikte netlerini hızla katlayabiliriz.";
+            } else {
+                level = "Temelden Başlama Seviyesi 🧱";
+                desc = "Hiç sorun değil! Matematiği görsel ve mantık odaklı sıfırdan inşa edeceğiz.";
+            }
+
+            document.getElementById('result-title').innerText = "Sonuç: " + level;
+            document.getElementById('result-desc').innerText = desc;
+            document.getElementById('result-box').style.display = "block";
+
+            // WhatsApp Dinamik Mesajı Hazırla
+            const customMessage = `Merhaba Hocam! Sitenizdeki seviye testini çözdüm. Sonucum: ${level}. Özel ders ve çalışma programı hakkında bilgi alabilir miyim?`;
+            const waUrl = `https://wa.me/${MY_PHONE_NUMBER}?text=${encodeURIComponent(customMessage)}`;
+            document.getElementById('wa-link').href = waUrl;
+        }
+    </script>
+</body>
+</html>
